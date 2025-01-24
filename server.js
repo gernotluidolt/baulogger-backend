@@ -45,7 +45,7 @@ app.post('/send-email', upload.single('pdf'), async (req, res) => {
         }
 
         const mailOptions = {
-            from: process.env.EMAIL_USER,
+            from: '"[no-reply] Baulogger" <bautagesbericht@baulogger.at>',
             to: recipient,
             subject: subject,
             text: body,
@@ -54,7 +54,11 @@ app.post('/send-email', upload.single('pdf'), async (req, res) => {
                     filename: file.originalname,
                     path: file.path
                 }
-            ]
+            ],
+            envelope: {
+                from: process.env.EMAIL_USER,
+                to: recipient,
+            },
         };
 
         await transporter.sendMail(mailOptions);
