@@ -29,8 +29,8 @@ const upload = multer({ storage: storage });
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER, // Your email
-        pass: process.env.EMAIL_PASS  // Your email password or app password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 });
 
@@ -45,7 +45,7 @@ app.post('/send-email', upload.single('pdf'), async (req, res) => {
         }
 
         const mailOptions = {
-            from: '"[no-reply] Baulogger" <bautagesbericht@baulogger.at>',
+            from: '"Baulogger" <no-reply@baulogger.at>',
             to: recipient,
             subject: subject,
             text: body,
@@ -64,7 +64,7 @@ app.post('/send-email', upload.single('pdf'), async (req, res) => {
         await transporter.sendMail(mailOptions);
         res.status(200).json({ message: 'Email sent successfully!' });
 
-        // Cleanup: Delete the file after sending
+        // Cleanup
         fs.unlinkSync(file.path);
     } catch (error) {
         console.error(error);
